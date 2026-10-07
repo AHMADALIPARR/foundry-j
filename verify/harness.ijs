@@ -1,11 +1,12 @@
 NB. Copyright (C) 2026 Foundry J contributors
 NB. SPDX-License-Identifier: AGPL-3.0-or-later
-NB. PASS/FAIL/BLOCKED helpers + Foundry Core loader (foundry.ijs + foundry_export).
+NB. PASS/FAIL/SKIP/BLOCKED helpers + Foundry Core loader (foundry.ijs + foundry_export).
 
 cocurrent 'z'
 
 PASS_N  =: 0
 FAIL_N  =: 0
+SKIP_N  =: 0
 BLOCK_N =: 0
 CORE_OK =: 0
 
@@ -21,6 +22,11 @@ pass =: 3 : 0
 fail =: 4 : 0
   FAIL_N =: FAIL_N + 1
   echo 'FAIL ' , y , ': ' , x
+)
+
+skip =: 4 : 0
+  SKIP_N =: SKIP_N + 1
+  echo 'SKIP ' , y , ': ' , x
 )
 
 blocked =: 4 : 0
@@ -44,6 +50,6 @@ load_foundry =: 3 : 0
 harness_finish =: 3 : 0
   echo ''
   echo '═══════════════════════════════════════'
-  echo 'PASS=' , (": PASS_N) , ' FAIL=' , (": FAIL_N) , ' BLOCKED=' , (": BLOCK_N)
+  echo 'PASS=' , (": PASS_N) , ' FAIL=' , (": FAIL_N) , ' SKIP=' , (": SKIP_N) , ' BLOCKED=' , (": BLOCK_N)
   if. FAIL_N > 0 do. 2!:55 ] 1 else. 2!:55 ] 0 end.
 )

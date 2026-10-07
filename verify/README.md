@@ -5,18 +5,18 @@
 
 # Foundry J — Verification Harness
 
-Pure-J checks for mathematical properties from `src/test.cpp`, mapped to
-`spec/PROPERTIES.md`. Core is the arithmetic authority (no Python).
+Pure-J checks for all 56 mathematical properties from `spec/PROPERTIES.md`.
+Core is the arithmetic authority (no Python).
 
 ## Run
 
 ```bash
-cd /workspace/foundry-j/verify
+cd verify
 ./run.sh
 # → logs/run-<timestamp>.log
 ```
 
-jconsole: `/home/box/j/j9.7/bin/jconsole`
+jconsole: `/home/box/j/j9.7/bin/jconsole` (override with `JCONSOLE`).
 
 ## Core load
 
@@ -25,10 +25,10 @@ load '../j/foundry.ijs'
 foundry_export ''
 ```
 
-J_API verbs used: `fp_add` `fp_mul` `fp_sub` `fp_inv` `pmat_new` `pmat_insert`
-`pmat_conservation` `spectral_analyze` `synth_weights` `rec_step` (+ constants).
-
 ## Verdicts
 
-`PASS` / `FAIL <name>: reason` / `BLOCKED <name>: missing …`  
-Exit non-zero only on FAIL. See `PROPERTY_MAP.md` for property numbers.
+`PASS` / `FAIL <name>: reason` / `SKIP <name>: reason` / `BLOCKED <name>: missing …`
+
+Per-property lines use ids `prop_1` … `prop_56`. Named baseline tests (`goldilocks_add`, …) are retained.
+
+Exit non-zero on any FAIL. See `PROPERTY_MAP.md` for the authoritative table.
