@@ -28,7 +28,7 @@ NB. out emit_apply (prev ; q ; policy ; epsilon)
 NB. PassThrough: out
 NB. Suppress: zeros if q >= 1-ε else out          (PROPERTIES 48)
 NB. Hold: prev if q >= 1-ε else out
-NB. Attenuate: out * max(0, 1-ε-q)                (PROPERTIES 49)
+NB. Attenuate: out * max(0, (1-ε)-q)  NB. parens: J is RTL (PROPERTIES 49)
 emit_apply =: 4 : 0
   out =. , x
   y =. boxxopen y
@@ -43,7 +43,7 @@ emit_apply =: 4 : 0
   case. GP_HOLD do.
     if. q >: 1 - eps do. prev else. out end.
   case. GP_ATTENUATE do.
-    scale =. 0 >. 1 - eps - q
+    scale =. 0 >. (1 - eps) - q
     out * scale
   case. do. out
   end.
@@ -60,7 +60,7 @@ csl_neutrality =: 4 : 0
   n =. # xv
   verdict =. CSL_PASS
   for_i. i. n do.
-    for_j. (i + 1) + i. 0 >. n - i - 1 do.
+    for_j. (i + 1) + i. 0 >. (n - i) - 1 do.
       dx =. | (i { xv) - j { xv
       dT =. | (i { Tx) - j { Tx
       if. (dx > 1e_15) *. ((dT % dx) > 1 + eps) do.
