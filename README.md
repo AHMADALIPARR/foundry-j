@@ -1,82 +1,75 @@
+<!--
+  Copyright (C) 2026 Foundry J contributors
+  SPDX-License-Identifier: AGPL-3.0-only
+-->
+
 # foundry-j
 
-Pure J array recreation of the mathematical cores of Foundry F1 (Goldilocks field, PMAT, spectral governor, Banach contraction recurrence).
+Pure J recreation of Foundry F1 **math cores only**: Goldilocks field,
+PMAT, spectral governor, and Banach contraction recurrence.
 
-## What the original Foundry (cpp-foundry / Foundry F1) did
+This is **not** the upstream C++/C99 Foundry orchestration stack. SHA-256
+WORM audit chains, Triple-Lock seals, gate/certify theater, Alapeno
+hardware, and the full Sedona spine are out of scope.
 
-Upstream C++/C99 Foundry F1 is described as an orchestration substrate around:
-
-- **Goldilocks field** \(\mathbb{F}_p\) with \(p = 2^{64} - 2^{32} + 1\)
-- **Banach contraction recurrence** for iterative weight updates
-- **Spectral governor** (contractive / expansive analysis)
-- **PMAT** (prime monomial / graded algebraic structure)
-- **SHA-256 WORM audit chain**, gates, and certification
-- A claimed **10-layer Sedona spine** and **17/17 C++ tests**
-
-Upstream report (reference only, not shipped here):  
+Upstream reference (not shipped here):
 https://github.com/SNAPKITTYWEST/SNAPKITTYWEST/tree/main/cpp-foundry
 
-The audit chain, linker, seals, gates/certify theater, and hardware layers are **not** part of this J repository. foundry-j recreates **only** the math cores in pure J.
+Goldilocks modulus:
 
-## What this J recreation does
+```
+p = 18446744069414584321 = 2^64 − 2^32 + 1
+```
 
-- Pure array implementation of **Goldilocks**, **PMAT**, **spectral**, and **recurrence** under `j/`
-- **56 numbered properties** inventoried in `spec/PROPERTIES.md` (with J API contract in `spec/J_API.md`)
-- Verification harness under `verify/` driven by **jconsole**
-- Measured harness result (2026-10-07 PT): **PASS=9 FAIL=0 BLOCKED=0** for  
-  `goldilocks_add` / `goldilocks_mul` / `goldilocks_inv` / `goldilocks_sub`,  
-  `pmat_insert` / `pmat_conservation`,  
-  `spectral_contractive` / `spectral_expansive`,  
-  `recurrence_converges`  
-  Log: `verify/logs/run-20261007-061853.log`
+## Quick start
 
-## Layout
-
-| Path | Role |
-|------|------|
-| `spec/` | Property inventory (`PROPERTIES.md`) and J API contract (`J_API.md`) |
-| `j/` | Pure J implementation (Goldilocks, PMAT, spectral, recurrence, types, gate/certify stubs) |
-| `verify/` | jconsole harness, property map, measured logs |
-| `docs/images/` | Demo screenshots (PNG drops land here) |
-| `LICENSE` | GNU Affero General Public License v3 only |
-
-## How to run
-
-Requires [J](https://www.jsoftware.com/) with `jconsole` on `PATH`, or the path used below.
+Requires [J](https://www.jsoftware.com/) with `jconsole` on `PATH`.
 
 ```bash
-# from a clone of this repo:
 cd verify
 ./run.sh
 
-# or directly:
-/home/box/j/j9.7/bin/jconsole verify/run.ijs
+# or:
+jconsole verify/run.ijs
 ```
 
-Expected terminal summary ends with:
+## Measured verify
 
-```text
-PASS=9 FAIL=0 BLOCKED=0
+Source: [`verify/logs/run-20261007-080122.log`](verify/logs/run-20261007-080122.log)
+(2026-10-07 PT):
+
+```
+PASS=61 FAIL=0 SKIP=4 BLOCKED=0
 ```
 
-## Demo screenshots
+SKIP are narrative/theater props only: Banach narrative (41), WORM/seal
+theater (47), guardian theater (55), consensus narrative (56). Property
+inventory: `spec/PROPERTIES.md`. J API: `spec/J_API.md`.
 
-Screenshots of the verification run land under `docs/images/`.
+## Layout
+
+```
+foundry-j/
+  LICENSE
+  README.md
+  spec/           PROPERTIES.md, J_API.md
+  j/              goldilocks, pmat, spectral, recurrence, types
+  verify/         harness, PROPERTY_MAP, run.sh, logs/
+  docs/images/    demo screenshots
+```
+
+## Demo
 
 ![Foundry J verify harness](docs/images/foundry-j-verify.png)
 
-*(Terminal capture: Foundry J verify 9/9 PASS; demo PNGs live under `docs/images/`.)*
+## Out of scope
+
+- SHA-256 WORM audit chain / PIRTM linker / Triple-Lock seals
+- Full gate/certify / CSL / AceCertificate theater
+- Alapeno hardware (`rtl/`, `spice/`, Why3)
+- Live orchestration beyond the math cores
 
 ## License
 
-**AGPL-3.0-only** — see [`LICENSE`](LICENSE).
-
-## Out of scope
-
-Not recreated here (present in or claimed by upstream cpp-foundry / Foundry F1, not this pure-J math surface):
-
-- SHA-256 WORM audit chain
-- PIRTM linker / Triple-Lock seals
-- Full gate/certify / emission / CSL / AceCertificate system theater
-- Alapeno hardware (`rtl/`, `spice/`, Why3, compiler)
-- Live orchestration substrate beyond the math cores
+Copyright © 2026 Foundry J contributors. **AGPL-3.0-only** — see
+[`LICENSE`](LICENSE).

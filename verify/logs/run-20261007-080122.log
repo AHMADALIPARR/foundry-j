@@ -1,0 +1,89 @@
+Using jconsole: /home/box/j/j9.7/bin/jconsole
+Working directory: /workspace/foundry-j-repo/verify
+Timestamp (PT): 2026-10-07 08:01:22 PDT
+Core present: yes
+────────────────────────────────────────
+Foundry J — Verification Harness
+═══════════════════════════════════════
+jconsole: j9.7.1/j64/linux/commercial/www.jsoftware.com/2026-04-06T04:00:54/clang-14-0-0/SLEEF=0
+core: ../j/foundry.ijs + foundry_export
+
+core_loaded=1
+
+── goldilocks ──
+PASS goldilocks_add
+PASS goldilocks_mul
+PASS goldilocks_inv
+PASS goldilocks_sub
+PASS prop_1
+PASS prop_2
+PASS prop_3
+PASS prop_4
+PASS prop_5
+PASS prop_6
+PASS prop_7
+PASS prop_8
+PASS prop_9
+PASS prop_10
+PASS prop_11
+PASS prop_12
+PASS prop_13
+PASS prop_14
+PASS prop_15
+PASS prop_16
+PASS prop_17
+PASS prop_18
+── constants ──
+PASS prop_19
+PASS prop_20
+PASS prop_21
+PASS prop_22
+PASS prop_23
+PASS prop_24
+PASS prop_25
+── pmat ──
+PASS pmat_insert
+PASS pmat_conservation
+PASS prop_26
+PASS prop_27
+PASS prop_28
+PASS prop_29
+PASS prop_30
+PASS prop_31
+PASS prop_32
+── spectral ──
+PASS spectral_contractive
+PASS spectral_expansive
+PASS prop_33
+PASS prop_34
+PASS prop_35
+PASS prop_36
+PASS prop_37
+PASS prop_38
+── recurrence ──
+PASS recurrence_converges
+PASS prop_39
+PASS prop_40
+SKIP prop_41: narrative-only Banach guarantee
+PASS prop_42
+PASS prop_43
+PASS prop_44
+PASS prop_45
+PASS prop_46
+── emit/csl/ace ──
+SKIP prop_47: WORM/seal chain / triple-lock theater out of harness scope
+PASS prop_48
+PASS prop_49
+PASS prop_50
+PASS prop_51
+PASS prop_52
+PASS prop_53
+PASS prop_54
+SKIP prop_55: no Core guardian verb (gate theater out of harness scope)
+SKIP prop_56: narrative-only consensus / 2^-256 bound
+
+═══════════════════════════════════════
+PASS=61 FAIL=0 SKIP=4 BLOCKED=0
+────────────────────────────────────────
+exit_code=0
+log=logs/run-20261007-080122.log
