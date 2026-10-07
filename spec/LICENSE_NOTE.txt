@@ -1,0 +1,3 @@
+AGPL-3.0 preferred for pure-J recreation inventory under this directory.
+Sources under /workspace/foundry-j do not ship a LICENSE file; this note records inventory policy only.
+Alapeno (/workspace/alapeno) is out of scope.

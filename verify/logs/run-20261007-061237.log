@@ -1,0 +1,53 @@
+Using jconsole: /home/box/j/j9.7/bin/jconsole
+Working directory: /workspace/foundry-j/verify
+Timestamp (PT): 2026-10-07 06:12:37 PDT
+Core present: yes
+────────────────────────────────────────
+Foundry J — Verification Harness
+═══════════════════════════════════════
+jconsole: j9.7.1/j64/linux/commercial/www.jsoftware.com/2026-04-06T04:00:54/clang-14-0-0/SLEEF=0
+core dir: ../j/
+
+── goldilocks ──
+FAIL goldilocks_add: |value error: gl_add
+|   r=.100x     gl_add 200x
+|[-62] /workspace/foundry-j/verify/tests/goldilocks.ijs
+
+FAIL goldilocks_mul: |value error: gl_mul
+|   r=.7x     gl_mul 6x
+|[-62] /workspace/foundry-j/verify/tests/goldilocks.ijs
+
+FAIL goldilocks_inv: |value error: gl_inv
+|   inv=.    gl_inv a
+|[-62] /workspace/foundry-j/verify/tests/goldilocks.ijs
+
+FAIL goldilocks_sub: |value error: gl_sub
+|   r=.100x     gl_sub 50x
+|[-62] /workspace/foundry-j/verify/tests/goldilocks.ijs
+
+── pmat ──
+FAIL pmat_insert: |value error: pmat_new
+|   m=.    pmat_new 3 3
+|[-51] /workspace/foundry-j/verify/tests/pmat.ijs
+
+FAIL pmat_conservation: |value error: pmat_new
+|   m=.    pmat_new 2 2
+|[-51] /workspace/foundry-j/verify/tests/pmat.ijs
+
+── spectral ──
+FAIL spectral_contractive: |value error: spectral_analyze
+|   r=.    spectral_analyze J;0.1
+|[-42] /workspace/foundry-j/verify/tests/spectral.ijs
+
+FAIL spectral_expansive: |value error: spectral_analyze
+|   r=.    spectral_analyze J;0.1
+|[-42] /workspace/foundry-j/verify/tests/spectral.ijs
+
+── recurrence ──
+BLOCKED recurrence_converges: missing ../j/recurrence.ijs
+
+═══════════════════════════════════════
+PASS=0 FAIL=8 BLOCKED=1
+────────────────────────────────────────
+exit_code=1
+log=logs/run-20261007-061237.log
