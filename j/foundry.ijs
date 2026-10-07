@@ -18,6 +18,7 @@ NB. ============================================================================
 NB.
 NB. Load order matches dependency: types → goldilocks → pmat → spectral →
 NB. recurrence → gate → certify.
+NB. Record boxing contracts: j/BOXING.md (StepInfo, SpectralResult, AceCert, PMat).
 NB.
 NB. Usage (from any cwd):
 NB.   load '/workspace/foundry-j/j/foundry.ijs'
@@ -47,7 +48,7 @@ NB. )
 
 NB. Instead expose a verb that copies selected names into base:
 foundry_export =: 3 : 0
-  ns =. ;: 'fp_reduce fp_add fp_sub fp_mul fp_mulmod fp_pow fp_inv fp_add_batch fp_mul_batch pmat_new pmat_insert pmat_validate_grading pmat_conservation pmat_compose pmat_frobenius pmat_entries pmat_shape gershgorin_bound gershgorin_check power_iteration power_iteration_check spectral_analyze synth_weights soft_project q_estimate residual_l2 rec_step rec_run tier_eps tier_epsilon emit_apply csl_neutrality csl_beneficence csl_commutation ace_safety_margin ace_tail_bound ace_certify GOLDILOCKS_PRIME p EPSILON_FOLD P64 P_64 K_MAX MAX_DRIFT PHI PIRTM_MAGIC T1 T2 T3 T4 WP_UNIFORM WP_HARMONIC WP_LOGDECAY GP_PASSTHROUGH GP_SUPPRESS GP_HOLD GP_ATTENUATE CSL_PASS CSL_FAIL_NEUTRALITY CSL_FAIL_BENEFICENCE CSL_FAIL_COMMUTATION'
+  ns =. ;: 'fp_reduce fp_add fp_sub fp_mul fp_mulmod fp_pow fp_inv fp_add_batch fp_mul_batch pmat_new pmat_insert pmat_validate_grading pmat_conservation pmat_compose pmat_frobenius pmat_entries pmat_shape gershgorin_bound gershgorin_check power_iteration power_iteration_check spectral_analyze sr_open sr_fields sr_radius sr_contractive synth_weights soft_project q_estimate residual_l2 rec_step rec_run tier_eps tier_epsilon emit_apply csl_neutrality csl_beneficence csl_commutation ace_safety_margin ace_tail_bound ace_certify GOLDILOCKS_PRIME p EPSILON_FOLD P64 P_64 K_MAX MAX_DRIFT PHI PIRTM_MAGIC T1 T2 T3 T4 WP_UNIFORM WP_HARMONIC WP_LOGDECAY GP_PASSTHROUGH GP_SUPPRESS GP_HOLD GP_ATTENUATE CSL_PASS CSL_FAIL_NEUTRALITY CSL_FAIL_BENEFICENCE CSL_FAIL_COMMUTATION'
   cocurrent 'base'
   for_n. ns do.
     ". (>n) , ' =: ' , (>n) , '_foundry_'

@@ -16,10 +16,12 @@ NB. You should have received a copy of the GNU Affero General Public License
 NB. along with this program.  If not, see <https://www.gnu.org/licenses/>.
 NB. =============================================================================
 NB.
-NB. Contract: spec/J_API.md § Spectral; PROPERTIES §F (33–38).
+NB. Contract: spec/J_API.md § Spectral; PROPERTIES §F (33–38); j/BOXING.md.
 NB. Jacobian = n×n real matrix.
-NB. SpectralResult = spectral_radius ; contractive ; gershgorin_bound ;
-NB.                  power_iter_bound ; used_power_iteration
+NB. SpectralResult open fields:
+NB.   spectral_radius ; contractive ; gershgorin_bound ;
+NB.   power_iter_bound ; used_power_iteration
+NB. Producers return <SpectralResult> (one outer box) — see BOXING.md.
 NB.
 NB. Verbs: gershgorin_bound gershgorin_check power_iteration
 NB.        power_iteration_check spectral_analyze
@@ -42,10 +44,11 @@ gershgorin_bound =: 3 : 0
 )
 
 NB. J gershgorin_check epsilon — contractive iff bound < 1-ε (PROPERTIES 34)
+NB. Returns <SpectralResult>
 gershgorin_check =: 4 : 0
   bound =. gershgorin_bound x
   contractive =. bound < (1 - y)
-  bound ; contractive ; bound ; bound ; 0
+  < bound ; contractive ; bound ; bound ; 0
 )
 
 NB. J power_iteration (max_iters , tol)
@@ -70,30 +73,34 @@ power_iteration =: 4 : 0
 )
 
 NB. J power_iteration_check (epsilon , max_iters) (PROPERTIES 36)
+NB. Returns <SpectralResult>
 power_iteration_check =: 4 : 0
   'eps max_iters' =. 2 {. (,y) , 0.1 100
   bound =. x power_iteration max_iters , 1e_12
   gersho =. gershgorin_bound x
   contractive =. bound < (1 - eps)
-  bound ; contractive ; gersho ; bound ; 1
+  < bound ; contractive ; gersho ; bound ; 1
 )
 
 NB. J spectral_analyze epsilon (PROPERTIES 37)
 NB. Gershgorin first; if contractive but bound > 0.95*(1-ε), power-iterate
+NB. Returns <SpectralResult>
 spectral_analyze =: 4 : 0
-  result =. x gershgorin_check y
+  result =. > x gershgorin_check y
   'sr c gersh pi used' =. result
   if. c *. (gersh > 0.95 * 1 - y) do.
-    result =. x power_iteration_check y , 100
+    result =. > x power_iteration_check y , 100
   end.
-  result
+  < result
 )
 
-NB. SpectralResult accessors
-sr_radius      =: 0 {:: ]
-sr_contractive =: 1 {:: ]
-sr_gersh       =: 2 {:: ]
-sr_power       =: 3 {:: ]
-sr_used_pi     =: 4 {:: ]
+NB. SpectralResult accessors — accept <SpectralResult> (L.>1) or open fields
+sr_open        =: >
+sr_fields      =: 3 : 'if. 1 < L. y do. > y else. y end.'
+sr_radius      =: 0 {:: sr_fields
+sr_contractive =: 1 {:: sr_fields
+sr_gersh       =: 2 {:: sr_fields
+sr_power       =: 3 {:: sr_fields
+sr_used_pi     =: 4 {:: sr_fields
 
 cocurrent 'base'

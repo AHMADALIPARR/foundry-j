@@ -17,6 +17,8 @@ NB. along with this program.  If not, see <https://www.gnu.org/licenses/>.
 NB. =============================================================================
 NB.
 NB. Contract: spec/J_API.md nouns + PROPERTIES.md §A,D (constants).
+NB. GAP_DECISIONS: EPSILON_FOLD fold noun; BARRITT_MU omitted (no Barrett path);
+NB. PHI exposed, no math consumer. Boxing: see j/BOXING.md.
 NB. Locale: foundry
 
 cocurrent 'foundry'

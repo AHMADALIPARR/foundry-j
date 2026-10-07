@@ -16,14 +16,18 @@ NB. You should have received a copy of the GNU Affero General Public License
 NB. along with this program.  If not, see <https://www.gnu.org/licenses/>.
 NB. =============================================================================
 NB.
-NB. Contract: spec/J_API.md § Banach recurrence; PROPERTIES §G (39–46).
+NB. Contract: spec/J_API.md § Banach recurrence; PROPERTIES §G (39–46); j/BOXING.md.
 NB. Equation: x_{t+1} = Ξ_t · x_t + Λ_t · T(x_t) + g_t
 NB. Constraint: q_t = ‖Ξ‖ + ‖Λ‖·‖T‖ < 1 - ε
 NB.
 NB. Verbs: synth_weights soft_project q_estimate residual_l2 rec_step rec_run
 NB.        (tier_eps lives in types.ijs)
 NB.
-NB. StepInfo = step ; q ; epsilon ; n_xi ; n_lam ; projected ; residual
+NB. StepInfo open fields (length 7):
+NB.   step ; q ; epsilon ; n_xi ; n_lam ; projected ; residual
+NB. rec_step → x_next ; <StepInfo>
+NB. rec_run  → list of <StepInfo>
+NB. REC_STATE → x_current ; converged ; <history>
 NB. T / p_op hooks: boxed verb-name strings (or gerunds) resolved by apply_hook.
 
 cocurrent 'foundry'
@@ -36,7 +40,7 @@ apply_hook =: 4 : 0
 
 NB. ── synth_weights ───────────────────────────────────────────────────────────
 NB. synth_weights max_steps;tier;profile;[primes]
-NB. Returns (xi_schedule ; lambda_schedule), each max_steps×2
+NB. Returns xi_schedule ; lambda_schedule (length 2; numeric tables) — BOXING.md
 NB. q_star=1-tier_eps; xi=q_star*factor*0.7; lam=q_star*factor*0.3 (PROPERTIES 44)
 synth_weights =: 3 : 0
   y =. boxxopen y
@@ -62,6 +66,7 @@ synth_weights =: 3 : 0
 
 NB. ── soft_project ────────────────────────────────────────────────────────────
 NB. (xi ; lam) soft_project (q ; eps)  — scale by (1-eps)/q if q>1-eps
+NB. Returns xi ; lam (length 2; numeric lists) — BOXING.md
 soft_project =: 4 : 0
   'xi lam' =. x
   xi =. , > xi
@@ -102,7 +107,7 @@ wt_at =: 4 : '((y <. 1) { , x)'
 
 NB. ── rec_step ────────────────────────────────────────────────────────────────
 NB. x_t rec_step xi;lam;g;T_hook;p_hook;[step_idx];[tier]
-NB. Returns (x_next ; StepInfo)
+NB. Returns x_next ; <StepInfo>  (length 2 — BOXING.md)
 rec_step =: 4 : 0
   xv =. , x
   y =. boxxopen y
@@ -145,8 +150,8 @@ rec_step =: 4 : 0
 
 NB. ── rec_run ─────────────────────────────────────────────────────────────────
 NB. x0 rec_run max_steps;tier;profile;tol;T_hook;p_hook
-NB. Returns boxed StepInfo history.
-NB. Sets REC_STATE =: x_current ; converged ; history
+NB. Returns list of <StepInfo> (Verify prop 46 via this history).
+NB. Sets REC_STATE =: x_current ; converged ; <history>  (length 3)
 rec_run =: 4 : 0
   x0 =. , x
   y =. boxxopen y
@@ -178,7 +183,7 @@ rec_run =: 4 : 0
     if. resid < tol do. converged =. 1 break. end.
   end.
 
-  REC_STATE =: xc ; converged ; history
+  REC_STATE =: xc ; converged ; <history
   history
 )
 

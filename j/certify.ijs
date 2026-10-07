@@ -16,8 +16,9 @@ NB. You should have received a copy of the GNU Affero General Public License
 NB. along with this program.  If not, see <https://www.gnu.org/licenses/>.
 NB. =============================================================================
 NB.
-NB. Contract: spec/J_API.md § ace_*; PROPERTIES §H (53–54).
-NB. AceCert = lipschitz_upper ; safety_margin ; tail_bound ; certified
+NB. Contract: spec/J_API.md § ace_*; PROPERTIES §H (53–54); j/BOXING.md.
+NB. AceCert open fields: lipschitz_upper ; safety_margin ; tail_bound ; certified
+NB. ace_certify returns <AceCert>.
 NB. Verbs: ace_safety_margin ace_tail_bound ace_certify
 
 cocurrent 'foundry'
@@ -31,12 +32,12 @@ ace_tail_bound =: 4 : 0
 )
 
 NB. steps ace_certify delta
-NB. steps = boxed list of StepInfo (step;q;eps;n_xi;n_lam;projected;residual)
-NB. Returns AceCert = max_q ; margin ; tail ; certified
+NB. steps = list of <StepInfo> (same packing as rec_run history)
+NB. Returns <AceCert>
 ace_certify =: 4 : 0
   steps =. boxxopen x
   delta =. y
-  if. 0 = # steps do. 0 ; 0 ; 0 ; 0 return. end.
+  if. 0 = # steps do. < 0 ; 0 ; 0 ; 0 return. end.
   qs =. 0 $ 0.
   rs =. 0 $ 0.
   for_s. steps do.
@@ -50,7 +51,7 @@ ace_certify =: 4 : 0
   margin =. max_q ace_safety_margin eps
   tail =. max_resid ace_tail_bound max_q
   certified =. margin >: delta
-  max_q ; margin ; tail ; certified
+  < max_q ; margin ; tail ; certified
 )
 
 cocurrent 'base'

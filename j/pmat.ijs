@@ -16,10 +16,11 @@ NB. You should have received a copy of the GNU Affero General Public License
 NB. along with this program.  If not, see <https://www.gnu.org/licenses/>.
 NB. =============================================================================
 NB.
-NB. Contract: spec/J_API.md § PMAT; PROPERTIES §E (26–32).
-NB. PMat = rows ; cols ; entries
+NB. Contract: spec/J_API.md § PMAT; PROPERTIES §E (26–32); GAP_DECISIONS §3–4; j/BOXING.md.
+NB. PMat open fields: rows ; cols ; entries
 NB. entries = n×5 table: sign, delta_source, delta_target, row, col
 NB. Signature = length-2 list (delta_source, delta_target)
+NB. pmat_insert returns new_PMat ; <ok>  (length 2; see BOXING.md)
 NB.
 NB. Verbs: pmat_new pmat_insert pmat_validate_grading pmat_conservation
 NB.        pmat_compose pmat_frobenius
@@ -39,7 +40,8 @@ pmat_shape   =: 3 : '(pmat_rows y) , (pmat_cols y)'
 
 NB. m pmat_insert (row ; col ; sign ; Signature)
 NB. Signature may be length-2 list or two trailing atoms ds,dt
-NB. Returns (new_PMat ; ok)  ok=0 on bounds/sign failure (PROPERTIES 27)
+NB. Returns new_PMat ; <ok>  (BOXING.md). ok=0 on bounds/sign failure only
+NB. (PROPERTIES 27 / GAP_DECISIONS §3 — no signature↔grade checks).
 pmat_insert =: 4 : 0
   args =. y
   if. 1 = L. args do.
@@ -58,13 +60,13 @@ pmat_insert =: 4 : 0
   if. -. s e. _1 1 do. ok =. 0 end.
   if. ok do.
     ents =. ents , s , ds , dt , r , c
-    ((rows ; cols ; ents) ; 1)
+    (rows ; cols ; ents) ; <ok
   else.
-    (x ; 0)
+    x ; <ok
   end.
 )
 
-NB. Mirror C++ stub: always true (PROPERTIES 28 gap — do not invent checks)
+NB. Mirror C++ stub: always true (PROPERTIES 28 gap / GAP_DECISIONS §3)
 pmat_validate_grading =: 3 : '1'
 
 NB. Σ monomials → Signature (PROPERTIES 29)
@@ -73,7 +75,8 @@ pmat_conservation =: 3 : 0
   if. 0 = # ents do. 0 0 else. +/ 1 2 {"1 ents end.
 )
 
-NB. a pmat_compose b — sign *= ; ds += a.ds ; dt += b.dt (PROPERTIES 30–31)
+NB. a pmat_compose b — sign *= ; ds += a.delta_source only ; dt += b.delta_target only
+NB. (PROPERTIES 31 as coded / GAP_DECISIONS §4 — not full both-signature sum)
 pmat_compose =: 4 : 0
   a =. x
   b =. y
