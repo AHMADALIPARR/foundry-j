@@ -8,64 +8,53 @@
 **Status:** DRAFT ONLY. Not implemented. Do not treat as Spec.  
 **Branch:** `draft/hcalc-production-api`  
 **Owner lane:** Foundry J Core  
-**Rule:** No formulas invented here. Verb names + wiring only. All math bodies land **after** Spec publishes `PRODUCTION.md` (path Spec chooses under `foundry-j` or `hcalc`).  
-**Existing cite hooks:** `P64`, `spectral_analyze`, `soft_project`, `q_estimate`, `synth_weights`, `rec_step` (see `spec/J_API.md`, `j/BOXING.md`, `spec/HCALC_CROSSLINKS.md`).
-
-Hilbert production ask (paraphrase): witness  
-`Tp` from `P64`, `C` = soft_project-or-id in-step, `Λm` scalar from op-norm bound,  
-step `X' = Ξ(t, Λm·C(Tp(X)))`.
+**Rule:** No formulas invented here. Verb names + wiring only. Math bodies land **after** Spec publishes `/workspace/hcalc/spec/PRODUCTION.md` (exact formulas).  
+**Existing cite hooks:** `P64`, `spectral_analyze`, `soft_project`, `q_estimate`, `synth_weights`, `rec_step` (`spec/J_API.md`, `j/BOXING.md`, `spec/HCALC_CROSSLINKS.md`).  
+**Aligned to:** HCALC Spec PRODUCTION close (via Hilbert) — intents below; Foundry J Spec `FOUNDRY_J_PRODUCTION_REVIEW.md` (bridge non-identity until ShapeMap named).
 
 ---
 
-## Proposed verb surface (names tentative until PRODUCTION.md)
+## Spec-stated intents (cite; formulas TBD in PRODUCTION.md)
 
-| Verb (draft) | Intent | Must reuse / call | Formula source |
-|--------------|--------|-------------------|----------------|
-| `tp_from_p64` | Build prime-indexed transform `Tp` from `P64` (+ optional mask) | `P64` / `P_64`; maybe `apply_hook` | **Gap-Tp-from-P64** — Spec PRODUCTION.md only |
-| `lam_m_from_bound` | Scalar `Λm` from an operator-norm / spectral bound | `spectral_analyze` (or gershgorin/power bounds inside it); `tier_eps` | **Gap-Λm-scalar** — Spec only |
-| `c_wrap` | In-step `C[·]`: identity, or soft-project path when budget exceeded | `q_estimate`, `soft_project` | **Gap-C-wrapper** — Spec only |
-| `hcalc_xi_apply` | Apply `Ξ(t, ·)` to a prepared vector | may use `synth_weights` row for time index `t` **only if Spec says so** | **Gap-Ξ** — Spec only |
-| `hcalc_step` | One nested step: `X' = Ξ(t, Λm · C(Tp(X)))` | compose the above; **do not** silently call additive `rec_step` as equal | **Gap-ShapeMap** — Spec only |
-| `hcalc_run` | Iterate `hcalc_step` with history boxing | follow `j/BOXING.md` nesting (`value ; <record>`) | Spec + BOXING |
+| Piece | Spec intent (as given) | Gap until PRODUCTION.md |
+|-------|------------------------|-------------------------|
+| \(T_p\) | From `P64` / PrimeMask **diagonal** \(\alpha_j\) | Gap-Tp-from-P64 — exact \(\alpha_j\) law TBD |
+| \(C\) | In-step soft_project governor on \(\|D(T_p)\|\) vs \(1-\varepsilon\) | Gap-C-wrapper — exact \(D(\cdot)\) TBD |
+| \(\Lambda_m\) | **Scalar** (not `lambda_schedule` vector) with \(\|\Lambda_m\cdot(C\circ T_p)\|_{\mathrm{op}}\le 1-\varepsilon\) | Gap-Λm-scalar — how bound is measured TBD |
+| \(\Xi(t,y)\) | \(\xi_t\cdot y+g_t\) from `xi_schedule` (Uniform default) | Gap-Ξ — schedule/g_t details TBD |
+| ShapeMap | Additive FoundryStep with \(T:=C\circ T_p\), \(\Lambda:=\Lambda_m\cdot\mathbf{1}\), \(\Xi:=\xi_t\) | Gap-ShapeMap — PRODUCTION.md must name this bridge |
+| Nested step | \(X'=\Xi(t,\Lambda_m\cdot C(T_p(X)))\) | Compose only after formulas land |
 
-Optional accessors (if Spec wants parity with SpectralResult / StepInfo):
+---
 
-| Draft noun/verb | Notes |
-|-----------------|-------|
-| `HcalcStepInfo` | Field order **owned by Spec**; Core freezes boxing in BOXING.md after Spec lists fields |
-| `lam_m`, `tp`, `c_mode` | Carriers; no default numeric constants beyond those Spec cites |
+## Proposed verb surface (names tentative)
+
+| Verb (draft) | Intent | Must reuse / call |
+|--------------|--------|-------------------|
+| `tp_from_p64` | \(T_p\) from `P64` / optional PrimeMask; diagonal \(\alpha_j\) when Spec defines \(\alpha\) | `P64` / `P_64` |
+| `lam_m_from_bound` | Scalar \(\Lambda_m\) from op-norm / spectral bound of \(C\circ T_p\) (or Spec-named Jacobian) | `spectral_analyze`, `tier_eps` |
+| `c_wrap` | In-step \(C[\cdot]\): id or soft_project governor vs \(1-\varepsilon\) | `q_estimate`, `soft_project` |
+| `hcalc_xi_apply` | \(\Xi(t,y)=\xi_t\cdot y+g_t\) using `xi_schedule` (Uniform default via `synth_weights`) | `synth_weights` |
+| `hcalc_step` | Nested one-step \(X'=\Xi(t,\Lambda_m\cdot C(T_p(X)))\) | compose above |
+| `hcalc_shapemap_step` | Optional: run additive `rec_step` under ShapeMap \(T:=C\circ T_p\), \(\Lambda:=\Lambda_m\cdot 1\), \(\Xi:=\xi_t\) **only if** PRODUCTION.md so directs | `rec_step` |
+| `hcalc_run` | Iterate with BOXING.md nesting | — |
 
 ---
 
 ## Explicit non-goals until PRODUCTION.md
 
-- Do **not** equate `hcalc_step` with Foundry `rec_step` (`x' = Ξx + ΛT(x) + g`) without a Spec-named ShapeMap.
-- Do **not** invent `Λm = (1-ε)/ρ` or any other closed form — even if “obvious.”
-- Do **not** invent `Tp` as “diagonal of P64” or PMAT compose unless Spec writes that law.
-- Do **not** implement Barrett / PHI / PMAT grading beyond `GAP_DECISIONS.md`.
-- Do **not** claim Sedona / PIRTM / Triple-Lock as math for `Tp`.
+- No invented \(\alpha_j\), \(\Lambda_m=(1-\varepsilon)/\rho\), or \(D(T_p)\) definitions.
+- Do not silently equate nested `hcalc_step` with Foundry `rec_step` without Spec-named ShapeMap.
+- Do not treat `lambda_schedule` as \(\Lambda_m\).
+- Honor `GAP_DECISIONS.md` (grading stub, compose deltas, no Barrett/PHI consumers).
 
 ---
 
-## Implementation checklist (after PRODUCTION.md lands)
+## Checklist after PRODUCTION.md lands
 
-1. Spec states path: `foundry-j/j/` vs `hcalc/...` and final verb names.  
-2. Core implements **only** formulas cited in PRODUCTION.md.  
-3. Extend `foundry.ijs` export list / loader.  
-4. Update `j/BOXING.md` for any new records.  
-5. Verify (or HCALC verify) adds measured tests — Core does not invent pass counts.  
-6. Push SHA; notify Hilbert.
+1. Read exact formulas + path (`foundry-j/j/` vs `hcalc/...`).  
+2. Implement **only** those formulas; rename verbs to Spec’s names if different.  
+3. Update `foundry.ijs` exports + `BOXING.md`.  
+4. Verify / report SHA to Hilbert + HCALC Spec.
 
----
-
-## Current tree readiness
-
-| Hook | Ready today |
-|------|-------------|
-| `P64` | yes (`types.ijs`) |
-| `spectral_analyze` | yes (`spectral.ijs`) |
-| `soft_project` / `q_estimate` | yes (`recurrence.ijs`) |
-| `synth_weights` / `rec_step` | yes — Foundry additive form |
-| Nested `hcalc_step` | **blocked** on PRODUCTION.md + Gap-ShapeMap |
-
-**Idle policy:** leave this draft; implement when PRODUCTION.md exists and names the map.
+**Idle now:** PRODUCTION.md still missing at review time.
