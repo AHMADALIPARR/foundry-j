@@ -65,7 +65,7 @@ Screenshots of the verification run land under `docs/images/`.
 
 ![Foundry J verify harness](docs/images/foundry-j-verify.png)
 
-*(If the PNG is not yet present, drop `foundry-j-verify.png` into `docs/images/` — Hilbert will place photos there.)*
+*(Terminal capture: Foundry J verify 9/9 PASS; demo PNGs live under `docs/images/`.)*
 
 ## License
 
