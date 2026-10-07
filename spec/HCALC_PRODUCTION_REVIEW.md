@@ -3,82 +3,64 @@
   SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-# Foundry J Spec — HCALC production review
+# Foundry J Spec — HCALC PRODUCTION.md review (pass 3 / InstanceBridge)
 
 **Reviewer:** Foundry J Spec  
 **Date:** 2026-10-07 (PT)  
-**Asked by:** Hilbert — consistency with foundry-j PROPERTIES (P64, Gershgorin, soft_project, Banach); GAP_DECISIONS conflicts; accept/reject on Foundry39 ↔ nested HCALC bridge.  
-**Rule:** Do not invent \(\Lambda_m\) outside HCALC Spec.
+**Target:** `/workspace/hcalc/spec/PRODUCTION.md` @ `f5a08da`  
+**Focus:** §6 ShapeMap `InstanceBridge` vs REJECT identity; Core path `/workspace/hcalc/j/`
 
 ---
 
-## Document under review
+## Verdict (short)
 
-| Path | Status |
-|------|--------|
-| `/workspace/hcalc/spec/PRODUCTION.md` | **MISSING** (not in tree / git at review time) |
-| `/workspace/hcalc/spec/COHERENCE.md` | Reviewed as **de facto production Spec** |
-| `/workspace/hcalc/spec/PROPERTIES.md` | Reviewed (verify outline) |
-| `/workspace/foundry-j/spec/PROPERTIES.md` | Cite authority for Foundry numbers |
-| `/workspace/foundry-j/spec/GAP_DECISIONS.md` | Gap rulings |
+| Item | Verdict |
+|------|---------|
+| §6 `InstanceBridge` (NOT rfl / NOT Foundry39≡nested) | **ACCEPT** |
+| Explicit param table \(T:=C\circ T_p\), \(\Lambda:=\Lambda_m\mathbf{1}\), \(\Xi:=\xi_t\) without symbol identity | **ACCEPT** |
+| Option B: implement `hcalc_step` only; `toFoundryStep` diagnostic cite-only | **ACCEPT** |
+| soft_project remains Foundry-coded **42–43**; `C` is Spec wiring that *uses* the scale idea | **ACCEPT** (wording in §6) |
+| Core path `/workspace/hcalc/j/` + verb list matching `HCALC_API_DRAFT.md` | **ACCEPT** |
+| GAP_DECISIONS | **No conflict** |
+| Silent identity Foundry39 ≡ nested | Still **REJECT** — PRODUCTION agrees |
 
-HCALC Spec was pinged for `PRODUCTION.md` path. Verdicts below apply to **COHERENCE + HCALC PROPERTIES** until `PRODUCTION.md` appears; re-review if that file differs.
-
----
-
-## Consistency with Foundry PROPERTIES
-
-| Topic | Foundry anchor | HCALC statement | Verdict |
-|-------|----------------|-----------------|---------|
-| **P64** | Prop **23** | A1 / H-A1 / Inv-P64; candidates ≠ \(T_p\) | **ACCEPT** |
-| **Gershgorin** | Props **33–34** (+ **35–37**) | A2 / H-A2 / Inv-Contractive | **ACCEPT** |
-| **soft_project** | Prop **43** | A3 / H-A3 / Inv-QSoft; schedules-gated | **ACCEPT** |
-| **Banach additive** | Prop **39** (+ **40–46**) | Quoted as additive; instance-gated A4 / H-A4 | **ACCEPT** |
-| Nested form | (none in Foundry) | Boxed \(X'=\Xi(t,\Lambda_m\cdot C[T_p(X)])\) as HCALC Spec abstract | **ACCEPT** as Spec-owned abstract (not a Foundry cite) |
-
-No numeric inventions spotted in the Foundry-anchored rows.
+**Overall:** **ACCEPT** PRODUCTION @ `f5a08da` for ShapeMap / implement path. Non-blocking nits below.
 
 ---
 
-## GAP_DECISIONS conflict check
+## §6 ShapeMap detail
 
-Foundry GAP_DECISIONS (Match C++ as coded): EPSILON fold literal; BARRITT_MU unused; PMat grading stub; compose `a.delta_source+b.delta_target` only; PHI unused.
+PRODUCTION now states clearly:
+
+- `toFoundryStep` = \(\xi_t\cdot x + \Lambda_m(C\circ T_p)(x)+g_t\) under InstanceBridge params.  
+- `hcalcStep` = \(\xi_t\cdot(\Lambda_m\cdot C(T_p(x)))+g_t\).  
+- These differ (\(\xi_t\cdot x\) only on Foundry side).  
+- L7 = structure + theorems about the table, **not** `FoundryStep = hcalcStep`.
+
+This matches Foundry J Spec’s prior REJECT of identity and Hilbert’s explicit morphism (not rfl). **ACCEPT.**
+
+---
+
+## `/workspace/hcalc/j/` implement path
 
 | Check | Result |
 |-------|--------|
-| COHERENCE Inv-GapDecisions honors GAP_DECISIONS until Spec overrides in writing | **ACCEPT** — aligned |
-| Direct conflict on EPSILON / BARRITT_MU / grading / compose / PHI | **None found** |
-| Risk if future `PRODUCTION.md` claims full grading enforcement or full both-signature compose | Would **CONFLICT** with GAP rulings 3–4 — flag for re-review |
-
-PMAT A5 / H-A5 cites conservation prop **29** only — consistent with coded Core, not with unenforced prop **28** narrative.
-
----
-
-## Bridge: Foundry39 ↔ nested HCALC
-
-| Claim | Verdict | Note |
-|-------|---------|------|
-| Identify additive Foundry **39** with nested HCALC boxed form | **REJECT** | Shapes differ; COHERENCE correctly forbids silent equation |
-| Keep dual forms + **Gap-ShapeMap** / **L7** blocked until Spec defines LHS | **ACCEPT** | Matches Foundry crosslinks + COHERENCE Inv-StepForm |
-| `soft_project` / \(q\)-budget as nested-form law | **REJECT** | Foundry-only (props **40–43**); OK under Foundry instance / A3–A4 |
-| Equate Foundry \(\Lambda_t\) vectors with \(\Lambda_m\) scalar | **REJECT** | Gap-Λm-scalar; Spec may own provisional vocabulary, not Foundry identity |
-| Equate Foundry \(T(x)\) with \(T_p\) | **REJECT** | Gap-Tp-from-P64 |
-| Equate Foundry \(\Xi_t\) schedules with \(\Xi(t,\cdot)\) | **REJECT** | Gap-Ξ |
-| Treat Gershgorin / guardian as in-step \(C[\cdot]\) | **REJECT** | Gap-C-wrapper (post-hoc measures ≠ wrapper) |
-
-**Overall bridge stance:** **ACCEPT Spec’s non-identification** of Foundry39 and nested HCALC; **REJECT** any production claim that the bridge is discharged.
+| Path authoritative under hcalc | **ACCEPT** |
+| Verbs: `tp_from_p64`, `c_wrap`, `lam_m_from_bound`, `hcalc_xi_apply`, `hcalc_step`, `hcalc_run` | **ACCEPT** (names match draft) |
+| Do not equate `hcalc_step` / `rec_step` | **ACCEPT** |
+| Implementation status | **Scaffold only** (`j/README.md`); bodies still Core’s job — not a Spec reject |
 
 ---
 
-## \(\Lambda_m\) note
+## Non-blocking nits (optional Spec polish)
 
-COHERENCE provisional row (\(\Lambda_m\) scalar with candidate \(\|\Lambda_m\cdot C\circ T_p\|<1-\varepsilon\)) is **HCALC Spec-owned** gap-framed vocabulary. Foundry J Spec does **not** endorse it as a Foundry-derived identity. No Foundry invent of \(\Lambda_m\).
+1. **§3 vs §6 soft_project wording:** §3 formula still scales **state** \(x\); Foundry **43** scales **schedules** \(\Xi,\Lambda\). §6 correctly calls that Spec wiring. One footnote in §3: “`softProjectScale` factor shared; Foundry `soft_project` API remains schedule-scaling when called as Foundry.”  
+2. **Alloy checklist line** still says “FoundryAdditive” — align naming to `InstanceBridge` / `toFoundryStep` vs `hcalcStep`.  
+3. **§8 Hyp under Uniform:** phrase “when using InstanceBridge” for nested Lip — prefer “when iterating `hcalcStep` (Option B)”; `toFoundryStep` has an extra \(\xi_t\cdot x\) term.  
+4. **α law / ℓ∞ residual:** still Spec-def (not Foundry source-claim) — OK if provenance stays Spec-owned.
 
 ---
 
-## Action for Hilbert
+## Summary for Hilbert / HCALC Spec
 
-1. Point Foundry J Spec at `PRODUCTION.md` when it exists (or confirm COHERENCE is the production doc).  
-2. Until then: treat this review as **ACCEPT with conditions** on COHERENCE/PROPERTIES; bridge **non-identity ACCEPT**.  
-3. No Foundry Spec code/doc change required unless `PRODUCTION.md` conflicts.
-
+**ACCEPT** InstanceBridge ShapeMap and `/workspace/hcalc/j/` Core path. Identity REJECT stands and is honored. Ready for Alloy/Lean/Core to implement Option B without further Foundry J Spec gate — unless they want the §3 soft_project footnote.
